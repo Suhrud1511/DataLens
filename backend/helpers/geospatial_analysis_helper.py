@@ -1,6 +1,25 @@
 import pandas as pd
 import folium
 def geospatial_analysis(df, lat_column, lon_column):
+    """
+    Performs geospatial analysis on a DataFrame by generating an interactive map.
+
+    This function takes a DataFrame containing latitude and longitude columns,
+    calculates the mean coordinates to center the map, and adds markers for each
+    point in the DataFrame.
+
+    Parameters:
+    df (pd.DataFrame): The DataFrame containing geospatial data.
+    lat_column (str): The name of the column containing latitude values.
+    lon_column (str): The name of the column containing longitude values.
+
+    Returns:
+    str: An HTML string representation of the generated map.
+
+    Raises:
+    ValueError: If the specified latitude or longitude column does not exist in the DataFrame.
+    ValueError: If the DataFrame is empty.
+    """
     if lat_column not in df.columns or lon_column not in df.columns:
         raise ValueError("Specified latitude or longitude column does not exist in the DataFrame.")
     
