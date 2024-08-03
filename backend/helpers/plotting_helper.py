@@ -9,6 +9,18 @@ from io import BytesIO
 custom_palette = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8", "#7FDBFF", "#F012BE", "#01FF70", "#FFD700", "#B10DC9"]
 
 def plot_to_image(fig, file_format='png'):
+    """
+    Convert a Matplotlib figure to an image encoded in base64.
+
+    This function is useful for embedding plots in HTML or other formats that support base64-encoded images.
+
+    Parameters:
+    fig (matplotlib.figure.Figure): The Matplotlib figure to convert.
+    file_format (str): The format of the output image (default is 'png').
+
+    Returns:
+    str: A string containing the base64-encoded image.
+    """
     for ax in fig.axes:
         ax.tick_params(colors='white')
         ax.xaxis.label.set_color('white')
@@ -27,6 +39,18 @@ sns.set_style("darkgrid")
 
 
 def correlation_analysis(df, numerical_columns):
+    """
+    Perform correlation analysis on numerical columns of a DataFrame.
+
+    This function calculates the correlation matrix for the given numerical columns.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to analyze.
+
+    Returns:
+    pandas.DataFrame: The correlation matrix of the numerical columns.
+    """
     print("Performing correlation analysis.")
     try:
         correlation_matrix = df[numerical_columns].corr()
@@ -36,6 +60,18 @@ def correlation_analysis(df, numerical_columns):
         return None
 
 def distribution_analysis(df, numerical_columns):
+    """
+    Generate distribution plots for numerical columns in a DataFrame.
+
+    This function creates histogram plots with KDE for each numerical column.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to plot.
+
+    Returns:
+    list of str: A list of base64-encoded images for each distribution plot.
+    """
     print("Generating distribution plots.")
     distribution_plots = []
     for i, col in enumerate(numerical_columns):
@@ -55,6 +91,18 @@ def distribution_analysis(df, numerical_columns):
     return distribution_plots
 
 def boxplot_analysis(df, numerical_columns):
+    """
+    Generate boxplots for numerical columns in a DataFrame.
+
+    This function creates a boxplot for each numerical column to visualize the distribution and identify outliers.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to plot.
+
+    Returns:
+    list of str: A list of base64-encoded images for each boxplot.
+    """
     print("Generating boxplot analysis.")
     boxplot_plots = []
     for i, col in enumerate(numerical_columns):
@@ -74,6 +122,17 @@ def boxplot_analysis(df, numerical_columns):
     return boxplot_plots
 
 def heatmap_analysis(correlation_matrix):
+    """
+    Generate a heatmap for the correlation matrix.
+
+    This function creates a heatmap to visualize the correlations between numerical columns.
+
+    Parameters:
+    correlation_matrix (pandas.DataFrame): The correlation matrix to visualize.
+
+    Returns:
+    str: A base64-encoded image of the heatmap.
+    """
     print("Generating heatmap for correlation matrix.")
     try:
         fig, ax = plt.subplots(figsize=(12, 10))
@@ -95,6 +154,18 @@ def heatmap_analysis(correlation_matrix):
         return None
 
 def pairplot_analysis(df, numerical_columns):
+    """
+    Generate a pairplot for numerical columns in a DataFrame.
+
+    This function creates a pairplot to visualize pairwise relationships and distributions of numerical columns.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to plot.
+
+    Returns:
+    str: A base64-encoded image of the pairplot.
+    """
     print("Generating pairplot analysis.")
     try:
         sns.set_palette(custom_palette)
@@ -114,6 +185,17 @@ def pairplot_analysis(df, numerical_columns):
         return None
 
 def missing_values_heatmap(df):
+    """
+    Generate a heatmap to visualize missing values in the DataFrame.
+
+    This function creates a heatmap where missing values are highlighted.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+
+    Returns:
+    str: A base64-encoded image of the missing values heatmap.
+    """
     print("Generating missing values heatmap.")
     try:
         fig, ax = plt.subplots()
@@ -132,6 +214,18 @@ def missing_values_heatmap(df):
         return None
 
 def outlier_analysis(df, numerical_columns):
+    """
+    Perform outlier analysis using boxplots for numerical columns.
+
+    This function creates boxplots for each numerical column to visualize and identify outliers.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to plot.
+
+    Returns:
+    list of str: A list of base64-encoded images for each outlier plot.
+    """
     print("Performing outlier analysis.")
     outlier_plots = []
     for i, col in enumerate(numerical_columns):
@@ -151,6 +245,18 @@ def outlier_analysis(df, numerical_columns):
     return outlier_plots
 
 def kde_analysis(df, numerical_columns):
+    """
+    Generate KDE plots for numerical columns in a DataFrame.
+
+    This function creates Kernel Density Estimate (KDE) plots for each numerical column.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to plot.
+
+    Returns:
+    list of str: A list of base64-encoded images for each KDE plot.
+    """
     print("Generating KDE plots.")
     kde_plots = []
     for i, col in enumerate(numerical_columns):
@@ -170,6 +276,18 @@ def kde_analysis(df, numerical_columns):
     return kde_plots
 
 def violin_plot_analysis(df, numerical_columns):
+    """
+    Generate violin plots for numerical columns in a DataFrame.
+
+    This function creates violin plots to visualize the distribution of numerical columns.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to plot.
+
+    Returns:
+    list of str: A list of base64-encoded images for each violin plot.
+    """
     print("Generating violin plots.")
     violin_plots = []
     for i, col in enumerate(numerical_columns):
@@ -189,6 +307,18 @@ def violin_plot_analysis(df, numerical_columns):
     return violin_plots
 
 def joint_plot_analysis(df, numerical_columns):
+    """
+    Generate joint plots for numerical columns in a DataFrame.
+
+    This function creates joint plots for numerical columns, showing scatter plots and marginal distributions.
+
+    Parameters:
+    df (pandas.DataFrame): The input data.
+    numerical_columns (list of str): The list of numerical columns to plot.
+
+    Returns:
+    list of str: A list of base64-encoded images for each joint plot.
+    """
     print("Generating joint plots.")
     joint_plots = []
     for i, col in enumerate(numerical_columns):
