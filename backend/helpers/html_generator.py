@@ -1,4 +1,26 @@
 def generate_html_report(df, eda_results, preprocessed_df, output_file='EDA_Report.html'):
+    """
+    Generates an HTML report for Exploratory Data Analysis (EDA) and saves it to a specified file.
+
+    This function creates an HTML report containing various analyses, including missing values,
+    numerical columns analysis, distribution plots, boxplots, pairplots, KDE analysis, outlier analysis,
+    correlation matrix heatmap, and more. The report includes tables, plots, and visualizations based on
+    the provided EDA results and preprocessed DataFrame.
+
+    Parameters:
+    df (pd.DataFrame): The original DataFrame before preprocessing.
+    eda_results (dict): A dictionary containing EDA results, including plots and analysis summaries.
+    preprocessed_df (pd.DataFrame): The DataFrame after preprocessing.
+    output_file (str): The name of the output HTML file. Default is 'EDA_Report.html'.
+
+    Returns:
+    None
+
+    Raises:
+    ValueError: If the provided DataFrame or EDA results dictionary is empty or missing required keys.
+
+
+    """
     print(f"Generating HTML report and saving to {output_file}.")
     
     html_content = []
