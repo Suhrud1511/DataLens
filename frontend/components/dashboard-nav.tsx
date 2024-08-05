@@ -7,6 +7,8 @@ import { Icons } from "@/components/icons";
 import { useSidebar } from "@/hooks/useSidebar";
 import { cn } from "@/lib/utils";
 import { NavItem } from "@/types";
+import { SignOutButton } from "@clerk/nextjs";
+import { LogIn } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import {
   Tooltip,
@@ -36,47 +38,82 @@ export function DashboardNav({
   console.log("isActive", isMobileNav, isMinimized);
 
   return (
-    <nav className="grid items-start gap-2">
-      <TooltipProvider>
-        {items.map((item, index) => {
-          const Icon = Icons[item.icon || "arrowRight"];
-          return (
-            item.href && (
-              <Tooltip key={index}>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={item.disabled ? "/" : item.href}
-                    className={cn(
-                      "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                      path === item.href ? "bg-accent" : "transparent",
-                      item.disabled && "cursor-not-allowed opacity-80"
-                    )}
-                    onClick={() => {
-                      if (setOpen) setOpen(false);
-                    }}
-                  >
-                    <Icon className={`ml-3 size-5 flex-none`} />
+    <nav>
+      <div className="flex flex-col justify-end gap-3">
+        <TooltipProvider>
+          {items.map((item, index) => {
+            const Icon = Icons[item.icon || "arrowRight"];
+            return (
+              item.href && (
+                <Tooltip key={index}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={item.disabled ? "/" : item.href}
+                      className={cn(
+                        "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                        path === item.href ? "bg-accent" : "transparent",
+                        item.disabled && "cursor-not-allowed opacity-80"
+                      )}
+                      onClick={() => {
+                        if (setOpen) setOpen(false);
+                      }}
+                    >
+                      <Icon className={`ml-3 size-5 flex-none`} />
 
-                    {isMobileNav || (!isMinimized && !isMobileNav) ? (
-                      <span className="mr-2 truncate">{item.title}</span>
-                    ) : (
-                      ""
-                    )}
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent
-                  align="center"
-                  side="right"
-                  sideOffset={8}
-                  className={!isMinimized ? "hidden" : "inline-block"}
+                      {isMobileNav || (!isMinimized && !isMobileNav) ? (
+                        <span className="mr-2 truncate">{item.title}</span>
+                      ) : (
+                        ""
+                      )}
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    align="center"
+                    side="right"
+                    sideOffset={8}
+                    className={!isMinimized ? "hidden" : "inline-block"}
+                  >
+                    {item.title}
+                  </TooltipContent>
+                </Tooltip>
+              )
+            );
+          })}
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SignOutButton>
+                <Link
+                  href={"/"}
+                  className={cn(
+                    "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  )}
+                  onClick={() => {
+                    if (setOpen) setOpen(false);
+                  }}
                 >
-                  {item.title}
-                </TooltipContent>
-              </Tooltip>
-            )
-          );
-        })}
-      </TooltipProvider>
+                  <LogIn className={`ml-3 size-5 flex-none`} />
+
+                  {isMobileNav || (!isMinimized && !isMobileNav) ? (
+                    <span className="mr-2 truncate">Logout</span>
+                  ) : (
+                    ""
+                  )}
+                </Link>
+              </SignOutButton>
+            </TooltipTrigger>
+            <TooltipContent
+              align="center"
+              side="right"
+              sideOffset={8}
+              className={!isMinimized ? "hidden" : "inline-block"}
+            >
+              Logout
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </nav>
   );
 }

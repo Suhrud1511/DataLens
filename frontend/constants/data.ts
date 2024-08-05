@@ -19,10 +19,4 @@ export const navItems: NavItem[] = [
     icon: "birdeye",
     label: "Bird Eye",
   },
-  {
-    title: "Login",
-    href: "/",
-    icon: "login",
-    label: "login",
-  },
 ];
