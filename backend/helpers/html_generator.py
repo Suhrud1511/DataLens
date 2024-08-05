@@ -1,4 +1,4 @@
-def generate_html_report(df, eda_results, preprocessed_df, output_file='EDA_Report.html'):
+def generate_html_report(df, eda_results, output_file='EDA_Report.html'):
     """
     Generates an HTML report for Exploratory Data Analysis (EDA) and saves it to a specified file.
 
@@ -157,30 +157,30 @@ def generate_html_report(df, eda_results, preprocessed_df, output_file='EDA_Repo
     ''')
 
     # Preprocessed Data Preview
-    html_content.append(f'''
-        <section class="section">
-            <h2 class="text-2xl font-bold mb-4">Preprocessed Data Preview</h2>
-            <table class="table-auto w-full mb-4">
-                <thead>
-                    <tr>
-                        <th class="border px-4 py-2">Column</th>
-                        <th class="border px-4 py-2">Preview</th>
-                    </tr>
-                </thead>
-                <tbody>
-    ''')
-    for col in preprocessed_df.columns:
-        html_content.append(f'''
-            <tr>
-                <td class="border px-4 py-2">{col}</td>
-                <td class="border px-4 py-2">{preprocessed_df[col].head().to_list()}</td>
-            </tr>
-        ''')
-    html_content.append('''
-                </tbody>
-            </table>
-        </section>
-    ''')
+    # html_content.append(f'''
+    #     <section class="section">
+    #         <h2 class="text-2xl font-bold mb-4">Preprocessed Data Preview</h2>
+    #         <table class="table-auto w-full mb-4">
+    #             <thead>
+    #                 <tr>
+    #                     <th class="border px-4 py-2">Column</th>
+    #                     <th class="border px-4 py-2">Preview</th>
+    #                 </tr>
+    #             </thead>
+    #             <tbody>
+    # ''')
+    # for col in preprocessed_df.columns:
+    #     html_content.append(f'''
+    #         <tr>
+    #             <td class="border px-4 py-2">{col}</td>
+    #             <td class="border px-4 py-2">{preprocessed_df[col].head().to_list()}</td>
+    #         </tr>
+    #     ''')
+    # html_content.append('''
+    #             </tbody>
+    #         </table>
+    #     </section>
+    # ''')
     if 'feature_importance' in eda_results:
         html_content.append(f'''
             <section class="section">
@@ -254,78 +254,83 @@ def generate_html_report(df, eda_results, preprocessed_df, output_file='EDA_Repo
         </section>
     ''')
 
+    full_html = f'''
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>EDA Report</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+            :root {{
+                --bg-color: #000000;
+                --text-color: #ffffff;
+                --section-bg: #1a1a1a;
+                --border-color: #333333;
+                --highlight-color: #9cf890;
+            }}
+            body {{
+                font-family: 'Roboto', sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                margin: 0;
+                padding: 0;
+                background-color: var(--bg-color);
+            }}
+            .container {{
+                width: 90%;
+                margin: auto;
+                overflow: hidden;
+            }}
+            .section {{
+                background: var(--section-bg);
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            }}
+            h1, h2, h3 {{
+                color: var(--highlight-color);
+            }}
+            h2 {{
+                border-bottom: 2px solid var(--border-color);
+                padding-bottom: 10px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+            }}
+            th, td {{
+                padding: 10px;
+                text-align: left;
+                border: 1px solid var(--border-color);
+            }}
+            th {{
+                background-color: var(--highlight-color);
+                color: var(--bg-color);
+            }}
+            pre {{
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header class="section">
+                <h1>Exploratory Data Analysis Report</h1>
+            </header>
+            {''.join(html_content)}
+        </div>
+    </body>
+    </html>
+    '''
+
     with open(output_file, 'w', encoding='utf-8') as file:
-        file.write(f'''
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>EDA Report</title>
-            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-                :root {{
-                    --bg-color: #000000;
-                    --text-color: #ffffff;
-                    --section-bg: #1a1a1a;
-                    --border-color: #333333;
-                    --highlight-color: #9cf890;
-                }}
-                body {{
-                    font-family: 'Roboto', sans-serif;
-                    line-height: 1.6;
-                    color: var(--text-color);
-                    margin: 0;
-                    padding: 0;
-                    background-color: var(--bg-color);
-                }}
-                .container {{
-                    width: 90%;
-                    margin: auto;
-                    overflow: hidden;
-                }}
-                .section {{
-                    background: var(--section-bg);
-                    padding: 20px;
-                    margin-bottom: 20px;
-                    border-radius: 5px;
-                    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-                }}
-                h1, h2, h3 {{
-                    color: var(--highlight-color);
-                }}
-                h2 {{
-                    border-bottom: 2px solid var(--border-color);
-                    padding-bottom: 10px;
-                }}
-                table {{
-                    width: 100%;
-                    border-collapse: collapse;
-                }}
-                th, td {{
-                    padding: 10px;
-                    text-align: left;
-                    border: 1px solid var(--border-color);
-                }}
-                th {{
-                    background-color: var(--highlight-color);
-                    color: var(--bg-color);
-                }}
-                pre {{
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <header class="section">
-                    <h1>Exploratory Data Analysis Report</h1>
-                </header>
-                {''.join(html_content)}
-            </div>
-        </body>
-        </html>
-        ''')
+        file.write(full_html)
+    
     print(f"HTML report saved as {output_file}")
+    
+    return full_html
