@@ -1,7 +1,7 @@
 # helpers/__init__.py
 
 from .html_generator import generate_html_report
-from .preprocess_helper import preprocess
+# from .preprocess_helper import preprocess
 from .plotting_helper import ( 
     plot_to_image,
     correlation_analysis,
@@ -62,7 +62,7 @@ __all__ = [
     'geospatial_analysis',
     'data_quality_score',
     'generate_automated_insights',
-    'preprocess',
+    # 'preprocess',
     'generate_html_report'
 
 ]
