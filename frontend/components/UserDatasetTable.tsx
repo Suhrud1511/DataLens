@@ -10,8 +10,6 @@ import {
 import { ScrollArea } from "./ui/scroll-area";
 
 export function UserDatasetTable({ jsonData }: { jsonData: any }) {
-  console.log(jsonData);
-
   if (!jsonData || jsonData.length === 0) {
     return <div>No data available</div>;
   }
@@ -19,7 +17,7 @@ export function UserDatasetTable({ jsonData }: { jsonData: any }) {
   const headers = Object.keys(jsonData[0]);
 
   return (
-    <ScrollArea className="h-[calc(80vh-180px)] w-[76vw] rounded-md border md:h-[calc(80dvh-100px)]">
+    <ScrollArea className="h-[calc(80vh-180px)] max-w-[76vw] w-max rounded-md border md:h-[calc(80dvh-120px)]">
       <Table className="w-max">
         <TableCaption>User Uploaded Dataset</TableCaption>
         <TableHeader className="sticky top-0 bg-secondary">

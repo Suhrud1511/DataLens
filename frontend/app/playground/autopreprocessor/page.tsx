@@ -1,24 +1,28 @@
 "use client";
+import HeaderWithActionButton from "@/components/layout/HeaderWithActionButton";
 import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserDatasetTable } from "@/components/UserDatasetTable";
-import { UploadButton } from "@/utils/uploadthing";
 import axios from "axios";
-import { Plus } from "lucide-react";
 import Papa from "papaparse";
 
 import { useEffect, useState } from "react";
 
-const Page = () => {
-  const [datasetUrl, setDatasetUrl] = useState<string>("");
+const Autopreprocessor = () => {
+  const [datasetUrl, setDatasetUrl] = useState<string>(() => {
+    return localStorage.getItem("datasetUrl") || "";
+  });
   const [datasetFile, setDatasetFile] = useState<File | null>(null);
   const [jsonData, setJsonData] = useState<any>(null);
+  const [preprocessedData, setPreprocessedData] = useState<File | null>(null);
+  const [preprocessedJsonData, setPreprocessedJsonData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (datasetUrl) {
+      setLoading(true);
       axios
         .get(datasetUrl, {
           responseType: "blob",
@@ -41,6 +45,7 @@ const Page = () => {
             });
           };
           reader.readAsText(file);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching the CSV file: ", error);
@@ -48,71 +53,108 @@ const Page = () => {
     }
   }, [datasetUrl]);
 
-  const handleAutoPreprocessor = () => {
-    console.log("Hello");
+  const handleAutoPreprocessor = async () => {
+    if (datasetUrl) {
+      setLoading(true);
+      try {
+        const response = await axios.get("http://127.0.0.1:5000/preprocess", {
+          params: {
+            url: datasetUrl,
+          },
+          responseType: "blob",
+        });
+        const preprocessedFile = response.data;
+
+        // Convert Blob to a file-like object for further handling
+        const file = new File([preprocessedFile], "preprocessed_data.csv", {
+          type: "text/csv",
+        });
+
+        setPreprocessedData(file);
+
+        // Parse the CSV file to JSON
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const text = event.target?.result as string;
+          Papa.parse(text, {
+            header: true,
+            complete: (results) => {
+              setPreprocessedJsonData(results.data);
+            },
+            error: () => {
+              console.error("Error parsing CSV");
+            },
+          });
+        };
+        reader.readAsText(file);
+        setLoading(false);
+      } catch (error: any) {
+        console.error("Error during preprocessing: ", error);
+        alert("Error during preprocessing: " + error.message);
+      }
+    } else {
+      alert("No dataset URL found. Please upload a dataset first.");
+    }
+  };
+
+  const handleDownloadPreprocessedData = async () => {
+    if (preprocessedData) {
+      const url = window.URL.createObjectURL(preprocessedData);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = "preprocessed_data.csv";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } else {
+      alert(
+        "No preprocessed data available. Please preprocess the dataset first."
+      );
+    }
   };
 
   return (
     <PageContainer>
-      <div className="flex items-center justify-between">
-        <Heading
-          title="AutoPreprocessor"
-          description="From Mess to Masterpiece: Preprocess your data in a jiffy 🎨"
-        />
-        {!jsonData ? (
-          <UploadButton
-            appearance={{
-              button:
-                "bg-primary text-primary-foreground shadow hover:bg-primary/90 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 px-4 w-26 mt-4 ut-button:bg-red-500 ut-button:ut-readying:bg-red-500/50",
-              container: "text-xs md:text-sm text-slate-200",
-              allowedContent: "",
-            }}
-            config={{ mode: "auto" }}
-            content={{
-              button({ ready }) {
-                if (ready)
-                  return (
-                    <div className="flex items-center justify-center">
-                      <Plus className="mr-1 h-4 w-4" /> Add Dataset
-                    </div>
-                  );
-
-                return "Getting ready...";
-              },
-              allowedContent({ ready, fileTypes, isUploading }) {
-                if (!ready) return "Checking what you allow";
-                if (isUploading) return "Seems like dataset is uploading";
-                return `You can upload CSV files`;
-              },
-            }}
-            endpoint="fileUploader"
-            onClientUploadComplete={(res) => {
-              console.log("Files: ", res[0].url);
-              setDatasetUrl(res[0].url);
-            }}
-            onUploadError={(error: Error) => {
-              alert(`ERROR! ${error.message}`);
-            }}
-          />
-        ) : (
-          <Button onClick={handleAutoPreprocessor}>
-            AutoPreprocess Dataset
-          </Button>
-        )}
-      </div>
-      <Separator className="my-3" />
+      <HeaderWithActionButton
+        setDatasetUrl={setDatasetUrl}
+        title="AutoPreprocessor"
+        description="From Mess to Masterpiece: Preprocess your data in a jiffy 🎨"
+      />
+      <Separator className="my-4" />
       {jsonData ? (
         <Tabs defaultValue="user-dataset">
-          <TabsList>
-            <TabsTrigger value="user-dataset">User Dataset</TabsTrigger>
-            <TabsTrigger value="preprocessed-dataset">
-              Preprocessed Dataset
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex justify-between">
+            <TabsList className="mb-2">
+              <TabsTrigger value="user-dataset">User Dataset</TabsTrigger>
+              <TabsTrigger value="preprocessed-dataset">
+                Preprocessed Dataset
+              </TabsTrigger>
+            </TabsList>
+            {loading ? (
+              <Button disabled>AutoPreprocessing Dataset</Button>
+            ) : preprocessedData ? (
+              <Button onClick={handleDownloadPreprocessedData}>
+                Download Preprocessed Dataset
+              </Button>
+            ) : (
+              <Button onClick={handleAutoPreprocessor}>
+                AutoPreprocess Dataset
+              </Button>
+            )}
+          </div>
           <TabsContent className="w-[90vw]" value="user-dataset">
             <UserDatasetTable jsonData={jsonData} />
           </TabsContent>
-          <TabsContent value="preprocessed-dataset">TODO</TabsContent>
+          <TabsContent value="preprocessed-dataset">
+            {preprocessedData ? (
+              <UserDatasetTable jsonData={preprocessedJsonData} />
+            ) : (
+              <p>
+                No preprocessed data available. Please preprocess the dataset.
+              </p>
+            )}
+          </TabsContent>
         </Tabs>
       ) : (
         <div className="flex flex-col gap-2 items-center justify-center h-96">
@@ -129,4 +171,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Autopreprocessor;
