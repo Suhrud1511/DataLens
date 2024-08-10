@@ -60,7 +60,7 @@ const HeroSection = () => {
                     width={1364}
                     height={866}
                     quality={100}
-                    className="rounded-md bg-[#ffffff1d] p-2 hidden shadow-2xl ring-1 ring-gray-900/10"
+                    className="rounded-md bg-[#ffffff1d] p-2 hidden dark:flex shadow-2xl ring-1 ring-gray-900/10"
                   />
                 </div>
               </div>
