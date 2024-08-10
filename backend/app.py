@@ -88,24 +88,14 @@ def preprocess_data():
         app.logger.error(f"Unexpected error during preprocessing: {str(e)}")
         return jsonify({"error": f"Error during preprocessing: {str(e)}"}), 500
 
-@app.route('/visualize', methods=['POST', 'GET'])
+@app.route('/visualize', methods=['GET'])
 def visualize_data():
     """
-    API endpoint for visualizing CSV data.
+    API endpoint for visualizing CSV data via a GET request.
     
-    This endpoint supports both POST and GET methods:
-    - POST: Accepts a file upload containing CSV data.
-    - GET: Accepts CSV data as a query parameter.
-    
-    The function performs the following steps:
-    1. Receives the data (either via file upload or query parameter)
-    2. Parses the CSV data into a pandas DataFrame
-    3. Performs Exploratory Data Analysis (EDA) using the perform_eda function
-    4. Generates an HTML report with the visualizations
-    5. Returns the HTML content in a JSON response
-    
-    If the generated HTML content is too large (>10MB), it returns a message
-    indicating that the content is too large to be returned directly.
+    This endpoint accepts a URL to a CSV file as a query parameter,
+    performs Exploratory Data Analysis (EDA) on the CSV data, 
+    and returns an HTML report with the visualizations.
     
     Returns:
         JSON response with the following structure:
@@ -131,10 +121,18 @@ def visualize_data():
     """
     try:
         app.logger.info("Received visualization request")
-        if request.method == 'POST':
-            df = handle_file_upload(request)
-        elif request.method == 'GET':
-            df = handle_get_request(request)
+        url = request.args.get('url')
+        if not url:
+            raise ValueError("No URL provided")
+        
+        response = requests.get(url)
+        if response.status_code != 200:
+            raise ValueError("Failed to download the file from the URL")
+        
+        content = response.content
+        # Use BytesIO to wrap the binary content
+        csv_buffer = BytesIO(content)
+        df = pd.read_csv(csv_buffer)
         
         app.logger.info("Performing EDA and generating visualizations")
         eda_results = perform_eda(df)

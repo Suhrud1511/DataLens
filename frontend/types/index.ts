@@ -10,6 +10,18 @@ export interface NavItem {
   description?: string;
 }
 
+export interface FAQsItem {
+  title: string;
+  content: string;
+}
+
+export type Testimonial = {
+  avatar: string;
+  name: string;
+  role: string;
+  content: string;
+};
+
 export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
 }
