@@ -89,7 +89,7 @@ const FeedbackButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="font-semibold text-slate-200 font-logo">
+        <button className="font-semibold text-slate-800 dark:text-slate-200 font-logo">
           Feedback
         </button>
       </DialogTrigger>

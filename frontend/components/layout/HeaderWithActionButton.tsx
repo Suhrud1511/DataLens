@@ -20,7 +20,7 @@ const HeaderWithActionButton = ({
   };
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-3 sm:flex-row items-start sm:items-center sm:justify-between">
       <Heading title={title} description={description} />
 
       <UploadButton
