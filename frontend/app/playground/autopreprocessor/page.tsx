@@ -121,11 +121,13 @@ const Autopreprocessor = () => {
         title="AutoPreprocessor"
         description="From Mess to Masterpiece: Preprocess your data in a jiffy 🎨"
       />
+
       <Separator className="my-4" />
+
       {jsonData ? (
         <Tabs defaultValue="user-dataset">
-          <div className="flex justify-between">
-            <TabsList className="mb-2">
+          <div className="flex sm:flex-row flex-col-reverse gap-3 justify-between">
+            <TabsList className="mb-2 w-max">
               <TabsTrigger value="user-dataset">User Dataset</TabsTrigger>
               <TabsTrigger value="preprocessed-dataset">
                 Preprocessed Dataset
