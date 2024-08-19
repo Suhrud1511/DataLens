@@ -1,11 +1,8 @@
 import matplotlib
-matplotlib.use('Agg')  # Use non-interactive backend for matplotlib
-from flask import Flask, request, jsonify, send_file, render_template_string
-from werkzeug.utils import secure_filename
+matplotlib.use('Agg') 
+from flask import Flask, request, jsonify, send_file
 import pandas as pd
-from io import StringIO, BytesIO
-import tempfile
-import os
+from io import BytesIO
 import logging
 import requests
 from logging.handlers import RotatingFileHandler
