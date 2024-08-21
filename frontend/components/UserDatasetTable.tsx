@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 export function UserDatasetTable({ jsonData }: { jsonData: any }) {
   if (!jsonData || jsonData.length === 0) {
@@ -17,7 +17,7 @@ export function UserDatasetTable({ jsonData }: { jsonData: any }) {
   const headers = Object.keys(jsonData[0]);
 
   return (
-    <ScrollArea className="h-[calc(80vh-180px)] max-w-[92vw] sm:max-w-[76vw] w-max rounded-md border md:h-[calc(80dvh-120px)]">
+    <ScrollArea className="h-[calc(80vh-180px)] max-w-[92vw] sm:max-w-[76vw] overflow-auto w-max rounded-md border md:h-[calc(80dvh-120px)]">
       <Table className="w-max">
         <TableCaption>User Uploaded Dataset</TableCaption>
         <TableHeader className="sticky top-0 bg-secondary">
@@ -37,6 +37,7 @@ export function UserDatasetTable({ jsonData }: { jsonData: any }) {
           ))}
         </TableBody>
       </Table>
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 }
