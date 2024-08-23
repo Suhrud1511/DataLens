@@ -57,12 +57,15 @@ const Autopreprocessor = () => {
     if (datasetUrl) {
       setLoading(true);
       try {
-        const response = await axios.get("http://127.0.0.1:5000/preprocess", {
-          params: {
-            url: datasetUrl,
-          },
-          responseType: "blob",
-        });
+        const response = await axios.get(
+          "https://datalens-backend.onrender.com/preprocess",
+          {
+            params: {
+              url: datasetUrl,
+            },
+            responseType: "blob",
+          }
+        );
         const preprocessedFile = response.data;
 
         // Convert Blob to a file-like object for further handling

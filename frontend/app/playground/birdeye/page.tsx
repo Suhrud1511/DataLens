@@ -60,12 +60,15 @@ const Birdeye = () => {
 
     setLoading(true);
     try {
-      const response = await axios.get("http://127.0.0.1:5000/visualize", {
-        params: {
-          url: datasetUrl,
-        },
-        responseType: "text",
-      });
+      const response = await axios.get(
+        "https://datalens-backend.onrender.com/visualize",
+        {
+          params: {
+            url: datasetUrl,
+          },
+          responseType: "text",
+        }
+      );
       const data = JSON.parse(response.data);
       const { html_content } = data;
       setReportHTML(html_content);
