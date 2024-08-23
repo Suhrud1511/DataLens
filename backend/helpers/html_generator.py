@@ -88,7 +88,9 @@ def generate_html_report(df, eda_results, output_file='EDA_Report.html'):
     html_content.append(f'''
         <section class="section">
             <h2 class="text-2xl font-bold mb-4">Distribution Plots</h2>
-            {''.join(eda_results['distribution_plots'])}
+            <div class=" flex flex-wrap gap-4">
+                {''.join(eda_results['distribution_plots'])}      
+            </div>
         </section>
     ''')
 
@@ -148,7 +150,7 @@ def generate_html_report(df, eda_results, output_file='EDA_Report.html'):
         </section>
     ''')
 
-# Joint Plot Analysis
+    # Joint Plot Analysis
     html_content.append(f'''
         <section class="section">
             <h2 class="text-2xl font-bold mb-4">Joint Plots</h2>
@@ -156,31 +158,6 @@ def generate_html_report(df, eda_results, output_file='EDA_Report.html'):
         </section>
     ''')
 
-    # Preprocessed Data Preview
-    # html_content.append(f'''
-    #     <section class="section">
-    #         <h2 class="text-2xl font-bold mb-4">Preprocessed Data Preview</h2>
-    #         <table class="table-auto w-full mb-4">
-    #             <thead>
-    #                 <tr>
-    #                     <th class="border px-4 py-2">Column</th>
-    #                     <th class="border px-4 py-2">Preview</th>
-    #                 </tr>
-    #             </thead>
-    #             <tbody>
-    # ''')
-    # for col in preprocessed_df.columns:
-    #     html_content.append(f'''
-    #         <tr>
-    #             <td class="border px-4 py-2">{col}</td>
-    #             <td class="border px-4 py-2">{preprocessed_df[col].head().to_list()}</td>
-    #         </tr>
-    #     ''')
-    # html_content.append('''
-    #             </tbody>
-    #         </table>
-    #     </section>
-    # ''')
     if 'feature_importance' in eda_results:
         html_content.append(f'''
             <section class="section">
